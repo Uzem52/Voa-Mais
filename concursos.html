@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Concursos públicos, cargos e informações para começar sua preparação.">
+  <title>Concursos Públicos | VoaMais</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/concursos.css">
+  <script type="module" src="js/concursos.js"></script>
+</head>
+<body>
+  <svg class="svg-library" aria-hidden="true"><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol><symbol id="i-close" viewBox="0 0 24 24"><path d="m18 6-12 12M6 6l12 12"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol></svg>
+  <header class="site-header"><div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="VoaMais, início"><span class="brand-mark">v<span>+</span></span><span>voa<span>mais</span></span></a>
+    <button class="menu-toggle icon-button" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="primary-nav"><svg class="icon"><use href="#i-menu"/></svg></button>
+    <nav class="primary-nav" id="primary-nav" aria-label="Navegação principal">
+      <a href="index.html">Início</a><a href="https://www.ev.org.br/" target="_blank" rel="noopener noreferrer">Cursos</a><a href="https://www.gov.br/mec/" target="_blank" rel="noopener noreferrer">Bolsas</a><a href="https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/enem" target="_blank" rel="noopener noreferrer">Vestibulares</a><a href="https://www.gov.br/mec/pt-br/assuntos/ept/rede-federal" target="_blank" rel="noopener noreferrer">IFs</a><a href="https://portal.ciee.org.br/" target="_blank" rel="noopener noreferrer">Trabalho</a><a href="concursos.html" aria-current="page">Concursos Públicos</a><a href="index.html#metodos">Ferramentas</a><a href="index.html#sobre">Sobre</a>
+    </nav>
+    <div class="header-actions"><a class="icon-button" href="index.html#busca" aria-label="Ir para a pesquisa">⌕</a></div>
+  </div></header>
+  <main class="concursos-page"><div class="container">
+    <a class="study-back" href="index.html">← Voltar para o VoaMais</a>
+    <header class="concursos-hero"><p class="eyebrow">Oportunidades e preparação</p><h1>Concursos Públicos</h1><p>Encontre concursos e processos seletivos com inscrições abertas e descubra oportunidades de acordo com sua escolaridade.</p><p class="concursos-intro">Consulte informações sobre cargos, escolaridade, salários, inscrições e editais. Sempre confira o edital oficial antes de realizar sua inscrição.</p></header>
+    <section class="contest-featured" aria-labelledby="featured-title"><p class="eyebrow">Para começar</p><h2 id="featured-title">Concursos em destaque</h2><p>Oportunidades de São Paulo com inscrições abertas, priorizando cargos de nível médio e técnico.</p></section>
+    <section class="contest-filters" aria-labelledby="filters-title"><div class="contest-filters-heading"><div><p class="eyebrow">Encontre seu caminho</p><h2 id="filters-title">Filtre as oportunidades</h2></div><button class="clear-filters" id="clear-filters" type="button">Limpar filtros</button></div>
+      <div class="filter-grid">
+        <label>Buscar por cargo ou órgão<input id="filter-search" type="search" placeholder="Ex.: tribunal, professor"></label>
+        <label>Estado<select id="filter-state"><option value="">Todos os estados</option><option>SP</option><option>MG</option><option>RJ</option><option>PR</option><option>BA</option></select></label>
+        <label>Cidade<input id="filter-city" type="search" placeholder="Ex.: São Paulo"></label>
+        <label>Escolaridade<select id="filter-education"><option value="">Todas</option><option>Fundamental</option><option>Médio</option><option>Técnico</option><option>Superior</option></select></label>
+        <label>Situação<select id="filter-status"><option value="">Todas</option><option>Inscrições abertas</option><option>Em breve</option><option>Encerradas</option></select></label>
+        <label>Área<select id="filter-area"><option value="">Todas</option><option>Administrativa</option><option>Educação</option><option>Saúde</option><option>Segurança</option><option>Tecnologia</option><option>Jurídica</option><option>Fiscal</option><option>Outras</option></select></label>
+        <label>Faixa salarial<select id="filter-salary"><option value="">Todas</option><option value="0-2000">Até R$ 2.000</option><option value="2000-5000">R$ 2.000 a R$ 5.000</option><option value="5000+">Acima de R$ 5.000</option></select></label>
+        <label>Ordenar por<select id="filter-sort"><option value="recent">Mais recentes</option><option value="deadline">Inscrições terminando primeiro</option><option value="salary">Maior salário</option><option value="vacancies">Maior número de vagas</option></select></label>
+      </div>
+      <div class="filter-options"><label class="open-only"><input id="filter-open" type="checkbox"> Ver somente concursos com inscrições abertas</label><label class="open-only"><input id="filter-favorites" type="checkbox"> Somente favoritos</label></div>
+    </section>
+    <section class="contest-results" aria-labelledby="results-title"><div class="results-heading"><div><p class="eyebrow">Dados disponíveis</p><h2 id="results-title">Concursos encontrados</h2></div><span id="results-count" aria-live="polite"></span></div><p class="contest-state" id="contest-loading" role="status">Carregando concursos...</p><div class="contest-grid" id="contest-grid"></div><p class="contest-state" id="contest-empty" hidden>Nenhum concurso encontrado com esses filtros.</p><p class="contest-state contest-error" id="contest-error" hidden>Não foi possível carregar os concursos. Tente novamente.</p></section>
+    <p class="contest-disclaimer">Os dados podem sofrer alterações. Antes de se inscrever, confira sempre o edital e o site oficial do órgão responsável.</p>
+  </div></main>
+  <div class="contest-modal" id="contest-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden><div class="contest-modal-card"><button class="modal-close" id="modal-close" type="button" aria-label="Fechar detalhes">×</button><p class="eyebrow">Detalhes do concurso</p><h2 id="modal-title"></h2><div id="modal-content"></div></div></div>
+  <footer class="site-footer"><div class="container footer-main"><div><a class="brand footer-brand" href="index.html"><span class="brand-mark">v<span>+</span></span><span>voa<span>mais</span></span></a><p>Conhecimento. Oportunidades. Você.</p></div><nav class="footer-links"><a href="index.html#sobre">Sobre</a><a href="pages/privacidade.html">Privacidade</a><a href="pages/termos.html">Termos de uso</a></nav><a class="back-top" href="#">Voltar ao topo ↑</a></div><div class="container footer-bottom"><span>© <span id="current-year"></span> VoaMais.</span><span>Um passo de cada vez.</span></div></footer>
+</body>
+</html>

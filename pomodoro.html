@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Aprenda a usar a Técnica Pomodoro para estudar com foco.">
+  <title>Técnica Pomodoro | VoaMais</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/responsive.css"><link rel="stylesheet" href="css/study-pages.css">
+</head>
+<body class="study-page">
+  <svg class="svg-library" xmlns="http://www.w3.org/2000/svg"><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol><symbol id="i-close" viewBox="0 0 24 24"><path d="m18 6-12 12M6 6l12 12"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol></svg>
+  <header class="site-header"><div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="VoaMais, início"><span class="brand-mark">v<span>+</span></span><span>voa<span>mais</span></span></a>
+    <button class="menu-toggle icon-button" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="primary-nav"><svg class="icon"><use href="#i-menu"/></svg></button>
+    <nav class="primary-nav" id="primary-nav" aria-label="Navegação principal"><a href="index.html">Início</a><a href="https://www.ev.org.br/" target="_blank" rel="noopener noreferrer">Cursos</a><a href="https://www.gov.br/mec/" target="_blank" rel="noopener noreferrer">Bolsas</a><a href="https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/enem" target="_blank" rel="noopener noreferrer">Vestibulares</a><a href="https://www.gov.br/mec/pt-br/assuntos/ept/rede-federal" target="_blank" rel="noopener noreferrer">IFs</a><a href="https://portal.ciee.org.br/" target="_blank" rel="noopener noreferrer">Trabalho</a><a href="index.html#metodos">Ferramentas</a><a href="index.html#sobre">Sobre</a></nav>
+    <div class="header-actions"><a class="icon-button" href="index.html#busca" aria-label="Ir para a pesquisa">⌕</a></div>
+  </div></header>
+  <main><div class="container">
+    <a class="study-back" href="index.html#metodos">← Voltar para ferramentas de estudo</a>
+    <div class="study-hero"><p class="eyebrow">01 · Foco e pausas</p><h1>Técnica Pomodoro</h1><p>Uma forma simples de organizar o tempo, começar sem procrastinar e proteger sua concentração.</p></div>
+    <div class="study-content"><article class="study-article">
+      <h2>O que é?</h2><p>A Técnica Pomodoro divide o estudo em períodos curtos de foco intenso, intercalados por pausas. Ela ajuda a transformar uma tarefa grande em próximos passos possíveis.</p>
+      <h2>Como funciona</h2><ol><li>Escolha uma tarefa e deixe o celular longe.</li><li>Estude por <strong>25 minutos de foco</strong>.</li><li>Faça <strong>5 minutos de pausa</strong>.</li><li>Repita o ciclo. Depois de quatro ciclos, faça uma pausa maior, de 15 a 30 minutos.</li></ol>
+      <div class="study-callout"><p>Comece pequeno: um ciclo já conta. O objetivo é criar ritmo, não estudar perfeitamente.</p></div>
+      <h2>Quando utilizar</h2><p>Use para leitura, exercícios, redação, revisão ou qualquer atividade que você esteja adiando. Para tarefas que exigem mais tempo de imersão, experimente dois ciclos seguidos antes da pausa.</p>
+      <h2>Dicas para estudar com Pomodoro</h2><ul><li>Anote interrupções para resolver depois.</li><li>Defina o que será concluído antes de iniciar o cronômetro.</li><li>Use a pausa para levantar, beber água e descansar os olhos.</li><li>Ao final, registre o que avançou e escolha o próximo passo.</li></ul>
+    </article><aside class="study-aside"><h2>Pronto para começar?</h2><p>Escolha uma tarefa, ajuste 25 minutos e faça seu primeiro ciclo.</p><button class="button button-primary study-button" id="open-pomodoro" type="button">Começar um Pomodoro <svg class="icon"><use href="#i-arrow"/></svg></button></aside></div>
+    <section class="pomodoro-timer" id="pomodoro-timer" aria-labelledby="timer-title" hidden>
+      <div class="timer-header"><div><p class="eyebrow">Seu ciclo de foco</p><h2 id="timer-title">Pomodoro</h2></div><span class="timer-status" id="timer-status" role="status">Pronto para começar</span></div>
+      <div class="timer-display" id="timer-display" aria-live="polite">25:00</div>
+      <div class="timer-modes" role="group" aria-label="Escolha a duração do ciclo"><button class="timer-mode is-active" type="button" data-duration="1500">Foco · 25 min</button><button class="timer-mode" type="button" data-duration="300">Intervalo · 5 min</button></div>
+      <div class="timer-actions"><button class="button button-primary" id="timer-start" type="button">Iniciar</button><button class="button timer-secondary" id="timer-pause" type="button" disabled>Pausar</button><button class="button timer-secondary" id="timer-reset" type="button">Reiniciar</button></div>
+      <p class="timer-message" id="timer-message">Quando o período terminar, você verá uma mensagem aqui.</p>
+    </section>
+  </div></main>
+  <footer class="site-footer"><div class="container footer-main"><div><a class="brand footer-brand" href="index.html"><span class="brand-mark">v<span>+</span></span><span>voa<span>mais</span></span></a><p>Conhecimento. Oportunidades. Você.</p></div><nav class="footer-links"><a href="index.html#sobre">Sobre</a><a href="pages/privacidade.html">Privacidade</a><a href="pages/termos.html">Termos de uso</a></nav><a class="back-top" href="#">Voltar ao topo ↑</a></div><div class="container footer-bottom"><span>© <span id="current-year"></span> VoaMais.</span><span>Um passo de cada vez.</span></div></footer>
+  <script type="module" src="js/study.js"></script>
+</body>
+</html>
