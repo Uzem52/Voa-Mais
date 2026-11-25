@@ -430,3 +430,24 @@ h2 { margin-bottom: 0; font-size: clamp(30px, 3.4vw, 41px); line-height: 1.2; le
   background: #fdecec;
   color: #b3261e;
 }
+/* Cole no FINAL do css/style.css */
+.saved-plan-banner {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  margin: 16px 0 4px; padding: 14px 16px; border-radius: 13px; background: #f0eaf3;
+}
+.saved-plan-banner strong { display: block; font-size: 13px; }
+.saved-plan-banner span { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
+.saved-plan-banner .button { flex: 0 0 auto; min-height: 38px; padding: 0 14px; font-size: 11px; white-space: nowrap; }
+
+.plan-save-note {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  margin-top: 18px; padding: 14px 16px; border-radius: 12px;
+  background: #e8f1e9; color: #3f6b4b; font-size: 12px; line-height: 1.6;
+}
+.plan-save-note p { margin: 0; }
+.plan-save-note .button { flex: 0 0 auto; min-height: 38px; padding: 0 14px; font-size: 11px; white-space: nowrap; }
+.plan-save-note.is-error { background: #fdecec; color: #b3261e; }
+
+@media (max-width: 640px) {
+  .saved-plan-banner, .plan-save-note { flex-direction: column; align-items: stretch; }
+}
