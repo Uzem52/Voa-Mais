@@ -1,6 +1,7 @@
 import "./opportunities.js";
 import "./search.js";
 import "./profile.js";
+import "./profile-validation.js";
 import "./scroll-effects.js";
 import "./icon-pop.js";
 import { setupSoundControl } from "./sounds.js";

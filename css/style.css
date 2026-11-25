@@ -422,3 +422,11 @@ h2 { margin-bottom: 0; font-size: clamp(30px, 3.4vw, 41px); line-height: 1.2; le
 @media (max-width: 640px) {
   .auth-user-name { display: none; }
 }
+.profile-step-error {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  background: #fdecec;
+  color: #b3261e;
+}
