@@ -1,0 +1,15 @@
+/* Cole no FINAL do css/concursos.css */
+.deadline-info {
+  display: inline-block;
+  margin: 0 0 12px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: #f0eaf3;
+  color: #75627e;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.contest-card.is-closed { opacity: .72; }
+.contest-card.is-closed:hover,
+.contest-card.is-closed:focus-within { opacity: 1; }

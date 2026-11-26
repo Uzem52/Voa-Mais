@@ -21,6 +21,11 @@ const filters = {
 };
 let contests = [];
 let favorites = loadFavorites();
+let defaultOpenOnly = false;
+
+// Ordem em que os grupos aparecem: abertos primeiro, encerrados por último.
+const STATUS_ORDER = { "Inscrições abertas": 0, "Em breve": 1, "Encerradas": 2 };
+const STATUS_LABEL = { "Encerradas": "Inscrições encerradas" };
 
 function loadFavorites() {
   try {
@@ -53,6 +58,37 @@ function dateValue(value) {
   return Number.isFinite(parsed) ? parsed : Number.MAX_SAFE_INTEGER;
 }
 
+// ---------- Datas e status (calculados a cada visita) ----------
+function isIsoDate(value) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value || "");
+}
+
+function todayStart() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today;
+}
+
+// Quantos dias faltam para a data (0 = hoje, negativo = já passou). null = data inválida.
+function daysUntil(value) {
+  if (!isIsoDate(value)) return null;
+  return Math.round((new Date(`${value}T00:00:00`) - todayStart()) / 86400000);
+}
+
+// O status vem das datas de inscrição, não do texto cadastrado.
+function computeStatus(contest) {
+  const toStart = daysUntil(contest.inscricaoInicio);
+  const toEnd = daysUntil(contest.inscricaoFim);
+  if (toEnd !== null && toEnd < 0) return "Encerradas";
+  if (toStart !== null && toStart > 0) return "Em breve";
+  if (toEnd !== null) return "Inscrições abertas";
+  return contest.status; // sem datas suficientes: mantém o status cadastrado
+}
+
+function statusRank(contest) {
+  return STATUS_ORDER[contest.status] ?? 1;
+}
+
 function filteredContests() {
   const query = normalize(filters.search.value);
   const salaryRange = filters.salary.value;
@@ -75,6 +111,8 @@ function filteredContests() {
   });
 
   return result.sort((first, second) => {
+    const byStatus = statusRank(first) - statusRank(second);
+    if (byStatus !== 0) return byStatus;
     if (filters.sort.value === "salary") return numericSalary(second.salario) - numericSalary(first.salario);
     if (filters.sort.value === "deadline") return dateValue(first.inscricaoFim) - dateValue(second.inscricaoFim);
     return dateValue(second.atualizadoEm) - dateValue(first.atualizadoEm);
@@ -88,26 +126,50 @@ function escapeHtml(value) {
 }
 
 function formatDate(value) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return "Não informado";
+  if (!isIsoDate(value)) return "Não informado";
   return new Intl.DateTimeFormat("pt-BR").format(new Date(`${value}T12:00:00`));
 }
 
-function daysUntil(value) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
-  return Math.ceil((new Date(`${value}T23:59:59`) - new Date()) / 86400000);
+function registrationText(contest) {
+  const hasStart = isIsoDate(contest.inscricaoInicio);
+  const hasEnd = isIsoDate(contest.inscricaoFim);
+  if (hasStart && hasEnd) return `${formatDate(contest.inscricaoInicio)} até ${formatDate(contest.inscricaoFim)}`;
+  if (hasEnd) return `Até ${formatDate(contest.inscricaoFim)}`;
+  if (hasStart) return `A partir de ${formatDate(contest.inscricaoInicio)}`;
+  return "Não informado";
 }
 
 function deadlineNotice(contest) {
-  const days = daysUntil(contest.inscricaoFim);
-  return days !== null && days >= 0 && days <= 7
-    ? `<span class="deadline-alert">Inscrições encerram em ${days === 0 ? "menos de 1 dia" : `${days} dias`}</span>`
-    : "";
+  if (contest.status === "Em breve") {
+    const days = daysUntil(contest.inscricaoInicio);
+    if (days === null) return "";
+    return `<span class="deadline-info">Inscrições abrem ${days === 1 ? "amanhã" : `em ${days} dias`}</span>`;
+  }
+
+  if (contest.status === "Inscrições abertas") {
+    const days = daysUntil(contest.inscricaoFim);
+    if (days === null) return "";
+    if (days === 0) return `<span class="deadline-alert">Último dia para se inscrever!</span>`;
+    const text = days === 1 ? "Falta 1 dia para o fim das inscrições" : `Faltam ${days} dias para o fim das inscrições`;
+    return `<span class="${days <= 7 ? "deadline-alert" : "deadline-info"}">${text}</span>`;
+  }
+
+  if (contest.status === "Encerradas") {
+    const days = daysUntil(contest.prova);
+    if (days === null || days < 0) return "";
+    const when = days === 0 ? "hoje" : days === 1 ? "amanhã" : `em ${days} dias`;
+    return `<span class="deadline-info">Prova ${when}</span>`;
+  }
+
+  return "";
 }
 
 function contestCard(contest) {
   const favorite = favorites.has(contest.id);
   const statusClass = normalize(contest.status).replace(/\s+/g, "-");
-  return `<article class="contest-card"><div class="contest-card-top"><span class="contest-status status-${statusClass}">${escapeHtml(contest.status)}</span><button class="favorite-button${favorite ? " is-favorite" : ""}" type="button" data-favorite="${escapeHtml(contest.id)}" aria-pressed="${favorite}" aria-label="${favorite ? "Remover dos favoritos" : "Favoritar concurso"}">${favorite ? "★" : "☆"}</button></div><p class="contest-organization">${escapeHtml(contest.orgao)}</p><h3>${escapeHtml(contest.concurso)}</h3>${deadlineNotice(contest)}<dl class="contest-details"><div><dt>Cidade/Estado</dt><dd>${escapeHtml(contest.cidade)} · ${escapeHtml(contest.estado)}</dd></div><div><dt>Cargos</dt><dd>${escapeHtml(contest.cargos.join(", "))}</dd></div><div><dt>Escolaridade</dt><dd>${escapeHtml(contest.escolaridades.join(", "))}</dd></div><div><dt>Vagas</dt><dd>${escapeHtml(contest.vagas)}</dd></div><div><dt>Salário</dt><dd>${escapeHtml(contest.salario)}</dd></div><div><dt>Taxa</dt><dd>${escapeHtml(contest.taxa)}</dd></div><div><dt>Inscrições</dt><dd>${formatDate(contest.inscricaoInicio)} até ${formatDate(contest.inscricaoFim)}</dd></div><div><dt>Prova</dt><dd>${formatDate(contest.prova)}</dd></div><div><dt>Banca</dt><dd>${escapeHtml(contest.banca)}</dd></div></dl><div class="contest-footer"><small>Última atualização: ${formatDate(contest.atualizadoEm)}<br><a href="${escapeHtml(contest.fonteUrl)}" target="_blank" rel="noopener noreferrer">Fonte oficial</a></small><div class="contest-actions"><button class="button contest-details-button" type="button" data-details="${escapeHtml(contest.id)}">Ver detalhes</button><a class="button button-primary contest-action" href="${escapeHtml(contest.editalUrl)}" target="_blank" rel="noopener noreferrer">Ver edital oficial <svg class="icon"><use href="#i-arrow"/></svg></a></div></div></article>`;
+  const statusText = STATUS_LABEL[contest.status] || contest.status;
+  const closedClass = contest.status === "Encerradas" ? " is-closed" : "";
+  return `<article class="contest-card${closedClass}"><div class="contest-card-top"><span class="contest-status status-${statusClass}">${escapeHtml(statusText)}</span><button class="favorite-button${favorite ? " is-favorite" : ""}" type="button" data-favorite="${escapeHtml(contest.id)}" aria-pressed="${favorite}" aria-label="${favorite ? "Remover dos favoritos" : "Favoritar concurso"}">${favorite ? "★" : "☆"}</button></div><p class="contest-organization">${escapeHtml(contest.orgao)}</p><h3>${escapeHtml(contest.concurso)}</h3>${deadlineNotice(contest)}<dl class="contest-details"><div><dt>Cidade/Estado</dt><dd>${escapeHtml(contest.cidade)} · ${escapeHtml(contest.estado)}</dd></div><div><dt>Cargos</dt><dd>${escapeHtml(contest.cargos.join(", "))}</dd></div><div><dt>Escolaridade</dt><dd>${escapeHtml(contest.escolaridades.join(", "))}</dd></div><div><dt>Vagas</dt><dd>${escapeHtml(contest.vagas)}</dd></div><div><dt>Salário</dt><dd>${escapeHtml(contest.salario)}</dd></div><div><dt>Taxa</dt><dd>${escapeHtml(contest.taxa)}</dd></div><div><dt>Inscrições</dt><dd>${registrationText(contest)}</dd></div><div><dt>Prova</dt><dd>${formatDate(contest.prova)}</dd></div><div><dt>Banca</dt><dd>${escapeHtml(contest.banca)}</dd></div></dl><div class="contest-footer"><small>Última atualização: ${formatDate(contest.atualizadoEm)}<br><a href="${escapeHtml(contest.fonteUrl)}" target="_blank" rel="noopener noreferrer">Fonte oficial</a></small><div class="contest-actions"><button class="button contest-details-button" type="button" data-details="${escapeHtml(contest.id)}">Ver detalhes</button><a class="button button-primary contest-action" href="${escapeHtml(contest.editalUrl)}" target="_blank" rel="noopener noreferrer">Ver edital oficial <svg class="icon"><use href="#i-arrow"/></svg></a></div></div></article>`;
 }
 
 function showDetails(id) {
@@ -137,7 +199,8 @@ function render() {
 
 function clearFilters() {
   Object.values(filters).forEach((control) => {
-    if (control.type === "checkbox") control.checked = false;
+    if (control === filters.openOnly) control.checked = defaultOpenOnly;
+    else if (control.type === "checkbox") control.checked = false;
     else if (control.id === "filter-sort") control.value = "recent";
     else control.value = "";
   });
@@ -160,7 +223,11 @@ document.querySelector("#modal-close").addEventListener("click", () => { documen
 document.querySelector("#current-year").textContent = new Date().getFullYear();
 
 try {
-  contests = await buscarConcursos();
+  const loaded = await buscarConcursos();
+  contests = loaded.map((contest) => ({ ...contest, status: computeStatus(contest) }));
+  // Se houver concursos abertos, a página já abre mostrando só eles.
+  defaultOpenOnly = contests.some((contest) => contest.status === "Inscrições abertas");
+  filters.openOnly.checked = defaultOpenOnly;
   loading.hidden = true;
   render();
 } catch (loadError) {
